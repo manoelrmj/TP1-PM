@@ -27,8 +27,4 @@ public class Imovel {
 	public int getTax(){
 		return this.tax;
 	}
-
-  	public void meuNome() {
-    	System.out.println("Meu nome é IMOVEL.");
-  	}
 }
