@@ -1,29 +1,33 @@
 public class Jogador {
 
-	private boolean isOut; // se saldo < 0 - jogador está fora
-	private int money;
+	private boolean playing; // se saldo < 0 - jogador está fora
+	private int balance;
 
-	public void setMoney(int money){
-		this.money = money;
+	public Jogador(int value){
+		this.balance = value;
+	}
+
+	public void setMoney(int value){
+		this.balance = value;
 	}
 
 	public int getMoney(){
-		return this.money;
+		return this.balance;
 	}
 
 	public int earnMoney(int value){
-		return this.money = this.money + value;
+		return this.balance = this.balance + value;
 	}
 
 	public int loseMoney(int value){
-		return this.money = this.money - value;
+		return this.balance = this.balance - value;
 	}
 
-	public void setIsOut(boolean isOut){
-		this.isOut = isOut;
+	public void setPlaying(boolean playing){
+		this.playing = playing;
 	}
 
-	public boolean getIsOut(){
-		return this.isOut;
+	public boolean isPlaying(){
+		return this.playing;
 	}
 }
