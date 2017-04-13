@@ -1,6 +1,11 @@
 public class Hospital extends Imovel {
 
-	public void meuNome() {
-    	System.out.println("Hospital");
-  	}
+	public Hospital(int price, int tax) {
+		super(price, tax);
+	}
+
+	@Override
+	public String getType() {
+		return "Hospital";		
+	}
 }

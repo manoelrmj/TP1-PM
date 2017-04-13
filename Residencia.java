@@ -1,6 +1,12 @@
 public class Residencia extends Imovel {
+	
+	public Residencia(int price, int tax) {
+		super(price, tax);
+	}
 
-	public void meuNome() {
-    	System.out.println("Residencia");
-  	}
+	@Override
+	public String getType() {
+		return "Residencia";
+		
+	}
 }
