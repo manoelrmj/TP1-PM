@@ -54,6 +54,7 @@ public class Main {
 		}
 		return movesDescription;
 	}
+
 	
 	public static void main(String[] args) {
 		// Leitura dos aquivos
@@ -61,6 +62,7 @@ public class Main {
 		String movesFilePath = "testes-alunos/entrada/jogadas.txt";
 		ArrayList<String> boardDescription = readBoardFile(boardFilePath);
 		ArrayList<String> movesDescription = readMovesFile(movesFilePath);
+		ArrayList<Jogador> jogadores = new ArrayList<Jogador>(); 
 		
 		// Variaveis para criação do tabuleiro e de jogadas		
 		String[] positionInput;
@@ -68,7 +70,9 @@ public class Main {
 		Imovel tmpProperty = null;
 		int id, position, type, propertyType, propertyValue, propertyTax;
 		String[] movesInfo;
+		String[] movesData;
 		int numMoves, numPlayers, initialBalance;
+		int playerId, diceNumber, playerPosition;
 		
 		Tabuleiro board = new Tabuleiro();
 		board.setNumPositions(Integer.parseInt(boardDescription.get(0)));
@@ -117,6 +121,14 @@ public class Main {
 		numMoves = Integer.parseInt(movesInfo[0]);
 		numPlayers = Integer.parseInt(movesInfo[1]);
 		initialBalance = Integer.parseInt(movesInfo[2]);
+
+		// Cria o arraylist com os jogadores
+		for (int i = 1; i<=numPlayers; i++){
+			Jogador jogador = new Jogador(i, initialBalance);
+			jogadores.add(jogador);
+		}
+
+		// O jogo tambem tem que parar quando só 1 jogador tiver dinheiro!!!!!!!!!!!!!!!!!!!!!!!!!
 		
 		for (int i=1; i<movesDescription.size(); i++){
 			if(movesDescription.get(i) == null){ 
@@ -124,17 +136,23 @@ public class Main {
 			}else if(movesDescription.get(i).equals("DUMP")){
 				System.out.println("DUMP"); // DUMP results to file
 			}else{
-				// Executar jogada
+				// Executar jogadas
+				movesData =  movesDescription.get(i).split(";");
+				playerId = (Integer.parseInt(movesData[1]) - 1);
+				diceNumber = Integer.parseInt(movesData[2]);
+				jogadores.get(playerId).updateDiceCounter(diceNumber);
+				playerPosition = jogadores.get(playerId).getPosition(board.getNumPositions());
 			}
 		}
 		
+	
 		// Teste - impressão dos dados do imóvel da posição de ID 4
-		Posicao p = board.getPosition(4);
+		/*Posicao p = board.getPosition(4);
 		System.out.println("ID: " + p.getId());
 		System.out.println("Position: " + p.getPosition());
 		System.out.println("Position tpye: " + p.getType());
 		System.out.println("Property type: " + p.getProperty().getType());
 		System.out.println("Property value: " + p.getProperty().getPrice());
-		System.out.println("Property tax: " + p.getProperty().getTax());
+		System.out.println("Property tax: " + p.getProperty().getTax());*/
 	}
 }
