@@ -153,7 +153,7 @@ public class Main {
 					}
 					System.out.println(" Atual: " + jogadores.get(playerId).getLaps(board.getNumPositions()) + " anterior: " + jogadores.get(playerId).getPreviousLap());
 					jogadores.get(playerId).updatePreviosLap(aux);
-				} //NÃO FUNCIONA AINDA - recever 500 ao passar no start
+				}
 
 				if(board.getPosition(playerPosition).getType() == 2){ // Se o jogador caiu em 'passe a vez'
 					jogadores.get(playerId).updatePassTurn();
