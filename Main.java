@@ -145,15 +145,15 @@ public class Main {
 				jogadores.get(playerId).updateDiceCounter(diceNumber);
 				playerPosition = jogadores.get(playerId).getPosition(board.getNumPositions());
 
-				/*if(jogadores.get(playerId).getLaps(board.getNumPositions()) != jogadores.get(playerId).getPreviousLap()){
+				if(jogadores.get(playerId).getLaps(board.getNumPositions()) != jogadores.get(playerId).getPreviousLap()){
 					// Verifica se deu uma volta, para que receba os 500 reais da posição start.
 					int aux = jogadores.get(playerId).getLaps(board.getNumPositions()) - jogadores.get(playerId).getPreviousLap();
-					for(i=0; i<aux; i++){
+					for(int j=0; j<aux; j++){
 						jogadores.get(playerId).receiveStartMoney();
 					}
-					System.out.println("Atual: " + jogadores.get(playerId).getLaps(board.getNumPositions()) + " anterior: " + jogadores.get(playerId).getPreviousLap());
+					System.out.println(" Atual: " + jogadores.get(playerId).getLaps(board.getNumPositions()) + " anterior: " + jogadores.get(playerId).getPreviousLap());
 					jogadores.get(playerId).updatePreviosLap(aux);
-				}*/ //NÃO FUNCIONA AINDA - recever 500 ao passar no start
+				} //NÃO FUNCIONA AINDA - recever 500 ao passar no start
 
 				if(board.getPosition(playerPosition).getType() == 2){ // Se o jogador caiu em 'passe a vez'
 					jogadores.get(playerId).updatePassTurn();
