@@ -1,3 +1,5 @@
+package imoveis;
+
 public class Comercio extends Imovel {
 
 	public Comercio(double price, double tax) {

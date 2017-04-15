@@ -1,3 +1,5 @@
+package imoveis;
+
 public class Industria extends Imovel {
 
 	public Industria(double price, double tax) {

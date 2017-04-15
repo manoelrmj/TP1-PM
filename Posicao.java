@@ -1,3 +1,5 @@
+import imoveis.*;
+
 public class Posicao {
 	
 	private int id;

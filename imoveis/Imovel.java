@@ -1,3 +1,5 @@
+package imoveis;
+
 public abstract class Imovel {
 
 	private double price;

@@ -1,3 +1,5 @@
+package imoveis;
+
 public class Hotel extends Imovel {
 
 	public Hotel(double price, double tax) {

@@ -1,3 +1,5 @@
+package imoveis;
+
 public class Hospital extends Imovel {
 
 	public Hospital(double price, double tax) {

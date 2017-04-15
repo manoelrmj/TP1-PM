@@ -1,3 +1,5 @@
+package imoveis;
+
 public class Residencia extends Imovel {
 	
 	public Residencia(double price, double tax) {
