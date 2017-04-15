@@ -145,21 +145,32 @@ public class Main {
 				jogadores.get(playerId).updateDiceCounter(diceNumber);
 				playerPosition = jogadores.get(playerId).getPosition(board.getNumPositions());
 
+				/*if(jogadores.get(playerId).getLaps(board.getNumPositions()) != jogadores.get(playerId).getPreviousLap()){
+					// Verifica se deu uma volta, para que receba os 500 reais da posição start.
+					int aux = jogadores.get(playerId).getLaps(board.getNumPositions()) - jogadores.get(playerId).getPreviousLap();
+					for(i=0; i<aux; i++){
+						jogadores.get(playerId).receiveStartMoney();
+					}
+					System.out.println("Atual: " + jogadores.get(playerId).getLaps(board.getNumPositions()) + " anterior: " + jogadores.get(playerId).getPreviousLap());
+					jogadores.get(playerId).updatePreviosLap(aux);
+				}*/ //NÃO FUNCIONA AINDA - recever 500 ao passar no start
+
 				if(board.getPosition(playerPosition).getType() == 2){ // Se o jogador caiu em 'passe a vez'
 					jogadores.get(playerId).updatePassTurn();
 				}
 				if(board.getPosition(playerPosition).getType() == 3){ // Se o jogador caiu em um imóvel
 					if(board.getPosition(playerPosition).getProperty().isSold()){ // Se o imóvel já tem dono
-						if(jogadores.get(playerId).getBalance() >= board.getPosition(playerPosition).getProperty().getTax()){
-							// Se o jogador tem dinheiro para pagar o aluguel
-							jogadores.get(playerId).payRent(board.getPosition(playerPosition).getProperty().getTax());
-							jogadores.get(board.getPosition(playerPosition).getProperty().getOwner()).receiveRent(board.getPosition(playerPosition).getProperty().getTax());
+						if(board.getPosition(playerPosition).getProperty().getOwner() != playerId){ // Se o imóvel não for dele mesmo
+							if(jogadores.get(playerId).getBalance() >= board.getPosition(playerPosition).getProperty().getTax()){
+								// Se o jogador tem dinheiro para pagar o aluguel
+								jogadores.get(playerId).payRent(board.getPosition(playerPosition).getProperty().getTax());
+								jogadores.get(board.getPosition(playerPosition).getProperty().getOwner()).receiveRent(board.getPosition(playerPosition).getProperty().getTax());
+							}
+							else{ // Se o jogar não tem dinheiro para pagar -> ele perde o jogo
+								jogadores.get(playerId).setPlaying(false);
+								// Tem que diminuir o dinheiro dele?
+							}
 						}
-						else{ // Se o jogar não tem dinheiro para pagar -> ele perde o jogo
-							jogadores.get(playerId).setPlaying(false);
-							// Tem que diminuir o dinheiro dele?
-						}
-
 					}
 					else{
 						if(jogadores.get(playerId).getBalance() >= board.getPosition(playerPosition).getProperty().getPrice()){
@@ -235,3 +246,4 @@ public class Main {
 		}
 	}
 }
+

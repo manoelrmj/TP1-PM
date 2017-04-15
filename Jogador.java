@@ -8,6 +8,7 @@ public class Jogador {
 	private double rentPaid = 0;
 	private double purchasedPropertyMoney = 0;
 	private int passTurnNum = 0;
+	private int previousLap = 0;
 
 	public Jogador(int id, double value){
 		this.id = id;
@@ -22,8 +23,8 @@ public class Jogador {
 		return this.balance;
 	}
 
-	public void receiveStartMoney(double value){
-		this.balance += value;
+	public void receiveStartMoney(){
+		this.balance += 500;
 	}
 
 	public void receiveRent(double value){
@@ -98,4 +99,13 @@ public class Jogador {
 	public int getPassTurn(){
 		return this.passTurnNum;
 	}
+
+	public void updatePreviosLap(int value){
+		this.previousLap += value;
+	}
+
+	public int getPreviousLap(){
+		return this.previousLap;
+	}
 }
+
