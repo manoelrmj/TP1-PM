@@ -1,7 +1,7 @@
 public class Jogador {
 
 	private boolean playing; // se saldo < 0 - jogador está fora
-	private double balance;
+	private double balance = 0;
 	private int id;
 	private int diceCounter = 1;
 	private double rentEarned = 0;

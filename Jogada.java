@@ -102,7 +102,7 @@ public final class Jogada {
 						}
 					}
 				}
-				else{
+				else{ // Se o imóvel não tem dono
 					if(players.get(playerId).getBalance() >= board.getPosition(playerPosition).getProperty().getPrice()){
 						// Se tiver dinheiro pra comprar:
 						board.getPosition(playerPosition).getProperty().setSold(true);
