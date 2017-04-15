@@ -5,6 +5,11 @@ public abstract class Imovel {
 	private double tax; // Value given in '%'
 	private int owner;
 	
+	/**
+	 * Construtor da classe Imovel.
+	 * @param price - Preco do imovel
+	 * @param tax - Taxa de aluguel sobre o imovel (dado em %)
+	 */
 	public Imovel(double price, double tax){
 		this.price = price;
 		this.tax = tax;

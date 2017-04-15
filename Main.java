@@ -8,6 +8,11 @@ public class Main {
 	private static BufferedReader readArq;
 	private static FileReader arq;
 	
+	/**
+	 * Método responsável pela leitura do arquivo 'tabuleiro.txt'
+	 * @param boardFilePath - Caminho do arquivo de entrada com informacoes do tabuleiro
+	 * @return Lista das strings lidas do arquivo (linha a linha) 
+	 */
 	public static ArrayList<String> readBoardFile(String boardFilePath){
 		String line = "";
 		ArrayList<String> boardDescription = new ArrayList<String>();
@@ -31,6 +36,12 @@ public class Main {
 		return boardDescription;
 	}
 
+	
+	/**
+	 * Metodo responsavel pela leitura do arquivo 'jogadas.txt'
+	 * @param movesFilePath - Caminho do arquivo de entrada com informaçoes das jogadas
+	 * @return Lista de strings lidas do arquivo (linha a linha)
+	 */
 	public static ArrayList<String> readMovesFile(String movesFilePath){
 		ArrayList<String> movesDescription = new ArrayList<String>();
 		String line = "";
@@ -40,7 +51,7 @@ public class Main {
 			readArq = new BufferedReader(arq);
 			while(line != null){
 				line = readArq.readLine();
-				System.out.println(line);
+				//System.out.println(line);
 				movesDescription.add(line);
 			}
 		} catch (IOException e) {
@@ -55,24 +66,16 @@ public class Main {
 		return movesDescription;
 	}
 
-	
-	public static void main(String[] args) {
-		// Leitura dos aquivos
-		String boardFilePath = "testes-alunos/entrada/tabuleiro.txt";
-		String movesFilePath = "testes-alunos/entrada/jogadas.txt";
-		ArrayList<String> boardDescription = readBoardFile(boardFilePath);
-		ArrayList<String> movesDescription = readMovesFile(movesFilePath);
-		ArrayList<Jogador> jogadores = new ArrayList<Jogador>(); 
-		
-		// Variaveis para criação do tabuleiro e de jogadas		
+	/**
+	 * Metodo responsavel pela criacao do objeto Tabuleiro a partir das strings lidas do arquivo de entrada.
+	 * @param boardDescription - Lista de strings lidas do arquivo
+	 * @return Objeto do tipo Tabuleiro, já com as devidas posicoes e imoveis
+	 */
+	public static Tabuleiro buildBoard(ArrayList<String> boardDescription){
 		String[] positionInput;
-		Posicao tmpPosition;
-		Imovel tmpProperty = null;
+		Posicao auxPosition;
+		Imovel auxProperty = null;
 		int id, position, type, propertyType, propertyValue, propertyTax;
-		String[] movesInfo;
-		String[] movesData;
-		int numMoves, numPlayers, initialBalance;
-		int playerId, diceNumber, playerPosition;
 		
 		Tabuleiro board = new Tabuleiro();
 		board.setNumPositions(Integer.parseInt(boardDescription.get(0)));
@@ -87,163 +90,97 @@ public class Main {
 			type = Integer.parseInt(positionInput[2]);
 
 			if(positionInput[2].equals("1") || positionInput[2].equals("2")){ // Se a posição é do tipo 'Start' ou 'Passe a vez'
-				tmpPosition = new Posicao(id, position, type);
-				board.addPosition(tmpPosition);
+				auxPosition = new Posicao(id, position, type);
+				board.addPosition(auxPosition);
 			}else{ // Se a posição é um 'Imovel'
 				propertyType = Integer.parseInt(positionInput[3]);
 				propertyValue = Integer.parseInt(positionInput[4]);
 				propertyTax = Integer.parseInt(positionInput[5]);
 				switch (propertyType){
 					case 1: // Residência
-						tmpProperty = new Residencia(propertyValue, propertyTax);
+						auxProperty = new Residencia(propertyValue, propertyTax);
 						break;
 					case 2: // Comércio
-						tmpProperty = new Comercio(propertyValue, propertyTax);
+						auxProperty = new Comercio(propertyValue, propertyTax);
 						break;
 					case 3: // Indústria
-						tmpProperty = new Industria(propertyValue, propertyTax);
+						auxProperty = new Industria(propertyValue, propertyTax);
 						break;
 					case 4: // Hotel
-						tmpProperty = new Hotel(propertyValue, propertyTax);
+						auxProperty = new Hotel(propertyValue, propertyTax);
 						break;
 					case 5: // Hospital
-						tmpProperty = new Hospital(propertyValue, propertyTax);
+						auxProperty = new Hospital(propertyValue, propertyTax);
 						break;
 				}
 					
-				tmpPosition = new Posicao(id, position, type, tmpProperty);
-				board.addPosition(tmpPosition);
+				auxPosition = new Posicao(id, position, type, auxProperty);
+				board.addPosition(auxPosition);
 			}
 		}
-		
-		// Leitura das jogadas
-		movesInfo = movesDescription.get(0).split("%"); 
-		numMoves = Integer.parseInt(movesInfo[0]);
-		numPlayers = Integer.parseInt(movesInfo[1]);
-		initialBalance = Integer.parseInt(movesInfo[2]);
+		return board;
+	}
 
-		// Cria o arraylist com os jogadores
-		for (int i = 1; i<=numPlayers; i++){
-			Jogador jogador = new Jogador(i, initialBalance);
-			jogadores.add(jogador);
-		}
-
-		// O jogo tambem tem que parar quando só 1 jogador tiver dinheiro!!!!!!!!!!!!!!!!!!!!!!!!!
-		// Falta receber 500 quando passa no star!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
-		// Falta devolver o imovel ao morrer!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
-
+	/**
+	 * Metodo responsavel por criar uma lista de objetos do tipo 'Jogada'.
+	 * Cada objeto nessa lista representa uma jogada lida da entrada.
+	 * @param movesDescription - Lista de strings que descrevem as jogadas, lidas do arquivo de entrada.
+	 * @return Lista de objetos do tipo 'Jogada'
+	 */
+	public static ArrayList<Jogada> buildMoves(ArrayList<String> movesDescription){
+		ArrayList<Jogada> jogadas = new ArrayList<Jogada>();
+		Jogada auxJogada;
+		String[] auxMove;
+		int auxId, auxPlayerId, auxDiceValue;
+		// Cria o arraylist de jogadas
 		for (int i=1; i<movesDescription.size(); i++){
-			if(movesDescription.get(i) == null){ 
+			//System.out.println(movesDescription.get(i));
+			if(movesDescription.get(i) == null){
 				break;
 			}else if(movesDescription.get(i).equals("DUMP")){
-				System.out.println("DUMP"); // DUMP results to file
+				auxJogada = new Jogada(0, 0, 0); // Constroi jogada do tipo "DUMP"
+				jogadas.add(auxJogada);
 			}else{
-				// Executar jogadas
-				movesData =  movesDescription.get(i).split(";");
-				playerId = (Integer.parseInt(movesData[1]) - 1);
-				diceNumber = Integer.parseInt(movesData[2]);
-				jogadores.get(playerId).updateDiceCounter(diceNumber);
-				playerPosition = jogadores.get(playerId).getPosition(board.getNumPositions());
+				auxMove = movesDescription.get(i).split(";");
+				auxId = Integer.parseInt(auxMove[0]);
+				auxPlayerId = Integer.parseInt(auxMove[1]);
+				auxDiceValue = Integer.parseInt(auxMove[2]);
+				auxJogada = new Jogada(auxId, auxPlayerId, auxDiceValue);
+				jogadas.add(auxJogada);	
+			}
+		}
+		return jogadas;
+	}
 
-				if(jogadores.get(playerId).getLaps(board.getNumPositions()) != jogadores.get(playerId).getPreviousLap()){
-					// Verifica se deu uma volta, para que receba os 500 reais da posição start.
-					int aux = jogadores.get(playerId).getLaps(board.getNumPositions()) - jogadores.get(playerId).getPreviousLap();
-					for(int j=0; j<aux; j++){
-						jogadores.get(playerId).receiveStartMoney();
-					}
-					System.out.println(" Atual: " + jogadores.get(playerId).getLaps(board.getNumPositions()) + " anterior: " + jogadores.get(playerId).getPreviousLap());
-					jogadores.get(playerId).updatePreviosLap(aux);
-				}
-
-				if(board.getPosition(playerPosition).getType() == 2){ // Se o jogador caiu em 'passe a vez'
-					jogadores.get(playerId).updatePassTurn();
-				}
-				if(board.getPosition(playerPosition).getType() == 3){ // Se o jogador caiu em um imóvel
-					if(board.getPosition(playerPosition).getProperty().isSold()){ // Se o imóvel já tem dono
-						if(board.getPosition(playerPosition).getProperty().getOwner() != playerId){ // Se o imóvel não for dele mesmo
-							if(jogadores.get(playerId).getBalance() >= board.getPosition(playerPosition).getProperty().getTax()){
-								// Se o jogador tem dinheiro para pagar o aluguel
-								jogadores.get(playerId).payRent(board.getPosition(playerPosition).getProperty().getTax());
-								jogadores.get(board.getPosition(playerPosition).getProperty().getOwner()).receiveRent(board.getPosition(playerPosition).getProperty().getTax());
-							}
-							else{ // Se o jogar não tem dinheiro para pagar -> ele perde o jogo
-								jogadores.get(playerId).setPlaying(false);
-								// Tem que diminuir o dinheiro dele?
-							}
-						}
-					}
-					else{
-						if(jogadores.get(playerId).getBalance() >= board.getPosition(playerPosition).getProperty().getPrice()){
-							// Se tiver dinheiro pra comprar:
-							board.getPosition(playerPosition).getProperty().setSold(true);
-							jogadores.get(playerId).buyProperty(board.getPosition(playerPosition).getProperty().getPrice());
-							board.getPosition(playerPosition).getProperty().setOwner(playerId);
-						}
-					}
-				}
-			}
+	public static void main(String[] args) {
+		// Leitura dos aquivos
+		String boardFilePath = "testes-alunos/entrada/tabuleiro.txt";
+		String movesFilePath = "testes-alunos/entrada/jogadas.txt";
+		ArrayList<String> boardDescription = readBoardFile(boardFilePath);
+		ArrayList<String> movesDescription = readMovesFile(movesFilePath);
+				
+		// Construcao do tabuleiro
+		Tabuleiro board = buildBoard(boardDescription);
+		
+		// Construcao das jogadas e dados da partida
+		String[] matchInfo; // Leitura de informacoes da partida
+		int numMoves, numPlayers, initialBalance;
+		matchInfo = movesDescription.get(0).split("%"); 
+		numMoves = Integer.parseInt(matchInfo[0]);
+		numPlayers = Integer.parseInt(matchInfo[1]);
+		initialBalance = Integer.parseInt(matchInfo[2]);
+		ArrayList<Jogada> moves = buildMoves(movesDescription);
+		
+		// Criacao dos jogadores
+		ArrayList<Jogador> players = new ArrayList<Jogador>();
+		for (int i = 1; i<=numPlayers; i++){
+			Jogador auxJogador = new Jogador(i, initialBalance);
+			players.add(auxJogador);
 		}
-
-
-		// Saida:
-		System.out.println("1:");
-		for(int i = 0; i < numPlayers; i++){
-			
-		}
-		System.out.print("2:");
-		for(int i = 0; i < numPlayers; i++){
-			if(i == (numPlayers-1)){
-				System.out.println((i+1) + "-" + jogadores.get(i).getLaps(board.getNumPositions()));
-			}
-			else{
-				System.out.print((i+1) + "-" + jogadores.get(i).getLaps(board.getNumPositions()) + ";");
-			}
-		}
-		System.out.print("3:");
-		for(int i = 0; i < numPlayers; i++){
-			if(i == (numPlayers-1)){
-				System.out.println((i+1) + "-" + jogadores.get(i).getBalance());
-			}
-			else{
-				System.out.print((i+1) + "-" + jogadores.get(i).getBalance() + ";");
-			}
-		}
-		System.out.print("4:");
-		for(int i = 0; i < numPlayers; i++){
-			if(i == (numPlayers-1)){
-				System.out.println((i+1) + "-" + jogadores.get(i).getRentEarned());
-			}
-			else{
-				System.out.print((i+1) + "-" + jogadores.get(i).getRentEarned() + ";");
-			}
-		}
-		System.out.print("5:");
-		for(int i = 0; i < numPlayers; i++){
-			if(i == (numPlayers-1)){
-				System.out.println((i+1) + "-" + jogadores.get(i).getRentPaid());
-			}
-			else{
-				System.out.print((i+1) + "-" + jogadores.get(i).getRentPaid() + ";");
-			}
-		}
-		System.out.print("6:");
-		for(int i = 0; i < numPlayers; i++){
-			if(i == (numPlayers-1)){
-				System.out.println((i+1) + "-" + jogadores.get(i).getPurchasedPropertyMoney());
-			}
-			else{
-				System.out.print((i+1) + "-" + jogadores.get(i).getPurchasedPropertyMoney() + ";");
-			}
-		}
-		System.out.print("7:");
-		for(int i = 0; i < numPlayers; i++){
-			if(i == (numPlayers-1)){
-				System.out.println((i+1) + "-" + jogadores.get(i).getPassTurn());
-			}
-			else{
-				System.out.print((i+1) + "-" + jogadores.get(i).getPassTurn() + ";");
-			}
-		}
+						
+		// Execucao das jogadas
+		for(int i = 0; i<moves.size(); i++)
+			Jogada.runMove(board, players, moves.get(i));
 	}
 }
 
