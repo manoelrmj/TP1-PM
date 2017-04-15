@@ -1,6 +1,6 @@
 public class Comercio extends Imovel {
 
-	public Comercio(int price, int tax) {
+	public Comercio(double price, double tax) {
 		super(price, tax);
 	}
 

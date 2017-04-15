@@ -129,7 +129,9 @@ public class Main {
 		}
 
 		// O jogo tambem tem que parar quando só 1 jogador tiver dinheiro!!!!!!!!!!!!!!!!!!!!!!!!!
-		
+		// Falta receber 500 quando passa no star!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+		// Falta devolver o imovel ao morrer!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+
 		for (int i=1; i<movesDescription.size(); i++){
 			if(movesDescription.get(i) == null){ 
 				break;
@@ -142,17 +144,94 @@ public class Main {
 				diceNumber = Integer.parseInt(movesData[2]);
 				jogadores.get(playerId).updateDiceCounter(diceNumber);
 				playerPosition = jogadores.get(playerId).getPosition(board.getNumPositions());
+
+				if(board.getPosition(playerPosition).getType() == 2){ // Se o jogador caiu em 'passe a vez'
+					jogadores.get(playerId).updatePassTurn();
+				}
+				if(board.getPosition(playerPosition).getType() == 3){ // Se o jogador caiu em um imóvel
+					if(board.getPosition(playerPosition).getProperty().isSold()){ // Se o imóvel já tem dono
+						if(jogadores.get(playerId).getBalance() >= board.getPosition(playerPosition).getProperty().getTax()){
+							// Se o jogador tem dinheiro para pagar o aluguel
+							jogadores.get(playerId).payRent(board.getPosition(playerPosition).getProperty().getTax());
+							jogadores.get(board.getPosition(playerPosition).getProperty().getOwner()).receiveRent(board.getPosition(playerPosition).getProperty().getTax());
+						}
+						else{ // Se o jogar não tem dinheiro para pagar -> ele perde o jogo
+							jogadores.get(playerId).setPlaying(false);
+							// Tem que diminuir o dinheiro dele?
+						}
+
+					}
+					else{
+						if(jogadores.get(playerId).getBalance() >= board.getPosition(playerPosition).getProperty().getPrice()){
+							// Se tiver dinheiro pra comprar:
+							board.getPosition(playerPosition).getProperty().setSold(true);
+							jogadores.get(playerId).buyProperty(board.getPosition(playerPosition).getProperty().getPrice());
+							board.getPosition(playerPosition).getProperty().setOwner(playerId);
+						}
+					}
+				}
 			}
 		}
-		
-	
-		// Teste - impressão dos dados do imóvel da posição de ID 4
-		/*Posicao p = board.getPosition(4);
-		System.out.println("ID: " + p.getId());
-		System.out.println("Position: " + p.getPosition());
-		System.out.println("Position tpye: " + p.getType());
-		System.out.println("Property type: " + p.getProperty().getType());
-		System.out.println("Property value: " + p.getProperty().getPrice());
-		System.out.println("Property tax: " + p.getProperty().getTax());*/
+
+
+		// Saida:
+		System.out.println("1:");
+		for(int i = 0; i < numPlayers; i++){
+			
+		}
+		System.out.print("2:");
+		for(int i = 0; i < numPlayers; i++){
+			if(i == (numPlayers-1)){
+				System.out.println((i+1) + "-" + jogadores.get(i).getLaps(board.getNumPositions()));
+			}
+			else{
+				System.out.print((i+1) + "-" + jogadores.get(i).getLaps(board.getNumPositions()) + ";");
+			}
+		}
+		System.out.print("3:");
+		for(int i = 0; i < numPlayers; i++){
+			if(i == (numPlayers-1)){
+				System.out.println((i+1) + "-" + jogadores.get(i).getBalance());
+			}
+			else{
+				System.out.print((i+1) + "-" + jogadores.get(i).getBalance() + ";");
+			}
+		}
+		System.out.print("4:");
+		for(int i = 0; i < numPlayers; i++){
+			if(i == (numPlayers-1)){
+				System.out.println((i+1) + "-" + jogadores.get(i).getRentEarned());
+			}
+			else{
+				System.out.print((i+1) + "-" + jogadores.get(i).getRentEarned() + ";");
+			}
+		}
+		System.out.print("5:");
+		for(int i = 0; i < numPlayers; i++){
+			if(i == (numPlayers-1)){
+				System.out.println((i+1) + "-" + jogadores.get(i).getRentPaid());
+			}
+			else{
+				System.out.print((i+1) + "-" + jogadores.get(i).getRentPaid() + ";");
+			}
+		}
+		System.out.print("6:");
+		for(int i = 0; i < numPlayers; i++){
+			if(i == (numPlayers-1)){
+				System.out.println((i+1) + "-" + jogadores.get(i).getPurchasedPropertyMoney());
+			}
+			else{
+				System.out.print((i+1) + "-" + jogadores.get(i).getPurchasedPropertyMoney() + ";");
+			}
+		}
+		System.out.print("7:");
+		for(int i = 0; i < numPlayers; i++){
+			if(i == (numPlayers-1)){
+				System.out.println((i+1) + "-" + jogadores.get(i).getPassTurn());
+			}
+			else{
+				System.out.print((i+1) + "-" + jogadores.get(i).getPassTurn() + ";");
+			}
+		}
 	}
 }

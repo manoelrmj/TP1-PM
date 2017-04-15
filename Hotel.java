@@ -1,6 +1,6 @@
 public class Hotel extends Imovel {
 
-	public Hotel(int price, int tax) {
+	public Hotel(double price, double tax) {
 		super(price, tax);
 	}
 

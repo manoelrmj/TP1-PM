@@ -1,19 +1,20 @@
 public abstract class Imovel {
 
-	private int price;
+	private double price;
 	private boolean sold = false;
-	private int tax; // Value given in '%'
+	private double tax; // Value given in '%'
+	private int owner;
 	
-	public Imovel(int price, int tax){
+	public Imovel(double price, double tax){
 		this.price = price;
 		this.tax = tax;
 	}
 
-	public final void setPrice(int price){
+	public final void setPrice(double price){
 		this.price = price;
 	}
 
-	public final int getPrice(){
+	public final double getPrice(){
 		return this.price;
 	}
 
@@ -25,12 +26,20 @@ public abstract class Imovel {
 		return this.sold;
 	}
 
-	public final void setTax(int tax){
+	public final void setTax(double tax){
 		this.tax = tax;
 	}
 
-	public final int getTax(){
-		return this.tax;
+	public final double getTax(){
+		return ((this.price*this.tax)/100);
+	}
+
+	public final void setOwner(int owner){
+		this.owner = owner;
+	}
+
+	public final int getOwner(){
+		return this.owner;
 	}
 	
 	public abstract String getType();

@@ -1,6 +1,6 @@
 public class Industria extends Imovel {
 
-	public Industria(int price, int tax) {
+	public Industria(double price, double tax) {
 		super(price, tax);
 	}
 

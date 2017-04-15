@@ -1,6 +1,6 @@
 public class Residencia extends Imovel {
 	
-	public Residencia(int price, int tax) {
+	public Residencia(double price, double tax) {
 		super(price, tax);
 	}
 

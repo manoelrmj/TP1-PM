@@ -9,12 +9,12 @@ public class Jogador {
 	private double purchasedPropertyMoney = 0;
 	private int passTurnNum = 0;
 
-	public Jogador(int id, int value){
+	public Jogador(int id, double value){
 		this.id = id;
 		this.balance = value;
 	}
 
-	public void setBalance(int value){
+	public void setBalance(double value){
 		this.balance = value;
 	}
 
@@ -22,11 +22,11 @@ public class Jogador {
 		return this.balance;
 	}
 
-	public void receiveStartMoney(int value){
+	public void receiveStartMoney(double value){
 		this.balance += value;
 	}
 
-	public void receiveRent(int value){
+	public void receiveRent(double value){
 		this.rentEarned += value;
 		this.balance += value;
 	}
@@ -35,7 +35,7 @@ public class Jogador {
 		return this.rentEarned;
 	}
 
-	public void payRent(int value){
+	public void payRent(double value){
 		this.rentPaid += value;
 		this.balance -= value;
 	}
@@ -44,7 +44,7 @@ public class Jogador {
 		return this.rentPaid;
 	}
 
-	public void buyProperty(int value){
+	public void buyProperty(double value){
 		this.purchasedPropertyMoney += value;
 		this.balance -= value;
 	}
