@@ -41,6 +41,10 @@ public class Jogador {
 		this.balance -= value;
 	}
 
+	public void payRentAndLose(double value){
+		this.balance -= value;
+	}
+
 	public double getRentPaid(){
 		return this.rentPaid;
 	}

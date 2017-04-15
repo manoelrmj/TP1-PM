@@ -6,6 +6,8 @@ public final class Jogada {
 	private int playerId;
 	private int diceValue;
 	private boolean dump = false;
+	private static int numPlayers;
+	private static int flag = 0; // flag para ver quantos jogadores tem
 	
 	/**
 	 * Construtor da classe Jogada. Ao receber todos os parametros com o valor 0,
@@ -16,7 +18,7 @@ public final class Jogada {
 	 * @param diceValue - Valor que saiu no dado
 	 */
 	public Jogada(int id, int playerId, int diceValue) {
-		if(id == 0 && playerId == 0 && diceValue == 0){
+		if((id == 0 && playerId == 0 && diceValue == 0) || (numPlayers == 1)){
 			this.dump = true;
 		}else{
 			this.id = id;
@@ -66,6 +68,11 @@ public final class Jogada {
 	 * @param move - Objeto do tipo 'Jogada', que possui informacoes da jogada a ser processada
 	 */
 	public static void runMove(Tabuleiro board, ArrayList<Jogador> players, Jogada move){
+		if(flag == 0){
+			flag = 1;
+			numPlayers = players.size();
+		}
+
 		if(move.isDump()){
 			printDump(board, players);
 		}else{
@@ -98,7 +105,8 @@ public final class Jogada {
 						}
 						else{ // Se o jogar não tem dinheiro para pagar -> ele perde o jogo
 							players.get(playerId).setPlaying(false);
-							// Tem que diminuir o dinheiro dele?
+							players.get(playerId).payRentAndLose(board.getPosition(playerPosition).getProperty().getTax());
+							numPlayers--;
 						}
 					}
 				}
