@@ -9,7 +9,7 @@ public class Main {
 	private static BufferedReader readArq;
 	private static FileReader arq;
 	/**
-	 * Método responsável pela leitura do arquivo 'tabuleiro.txt'
+	 * Metodo responsavel pela leitura do arquivo 'tabuleiro.txt'
 	 * @param boardFilePath - Caminho do arquivo de entrada com informacoes do tabuleiro
 	 * @return Lista das strings lidas do arquivo (linha a linha) 
 	 */
@@ -154,8 +154,8 @@ public class Main {
 
 	public static void main(String[] args) {
 		// Leitura dos aquivos
-		String boardFilePath = "testes-alunos/entrada/tabuleiro.txt";
-		String movesFilePath = "testes-alunos/entrada/jogadas.txt";
+		String boardFilePath = "testes/tabuleiro_2.txt";
+		String movesFilePath = "testes/jogadas_2.txt";
 		ArrayList<String> boardDescription = readBoardFile(boardFilePath);
 		ArrayList<String> movesDescription = readMovesFile(movesFilePath);
 				
@@ -164,9 +164,8 @@ public class Main {
 		
 		// Construcao das jogadas e dados da partida
 		String[] matchInfo; // Leitura de informacoes da partida
-		int numMoves, numPlayers, initialBalance;
+		int numPlayers, initialBalance;
 		matchInfo = movesDescription.get(0).split("%"); 
-		numMoves = Integer.parseInt(matchInfo[0]);
 		numPlayers = Integer.parseInt(matchInfo[1]);
 		initialBalance = Integer.parseInt(matchInfo[2]);
 		ArrayList<Jogada> moves = buildMoves(movesDescription);

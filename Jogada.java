@@ -135,9 +135,8 @@ public final class Jogada {
 						board.getPosition(playerPosition).getProperty().setOwner(playerId);
 					}
 				}
-				
-				player.increaseNumRound();
 			}
+			player.increaseNumRound();
 		}
 	}
 
