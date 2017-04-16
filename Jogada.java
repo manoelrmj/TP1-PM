@@ -69,6 +69,13 @@ public final class Jogada {
 		Jogada.playersPlaying = playersPlaying;
 	}
 
+	public static double adjustNumber(double num){
+		num *= 100;
+		num = Math.round(num);
+		num /= 100;
+		return num;
+	}
+
 	/**
 	 * Metodo que executa as jogadas. A partir das informacoes do estado do jogo (fornecido pelos
 	 * objetos 'Tabuleiro' e pela lista de jogadores) e com os dados da jogada realizada, o estado
@@ -174,33 +181,33 @@ public final class Jogada {
 			writer.print("3:");
 			for(int i = 0; i < numPlayers; i++)
 				if(i == (numPlayers-1))
-					writer.println((i+1) + "-" + players.get(i).getBalance());
+					writer.println((i+1) + "-" + adjustNumber(players.get(i).getBalance()));
 				else
-					writer.print((i+1) + "-" + players.get(i).getBalance() + ";");
+					writer.print((i+1) + "-" + adjustNumber(players.get(i).getBalance()) + ";");
 			
 			// Qual foi a quantidade de aluguel recebida por cada jogador?
 			writer.print("4:");
 			for(int i = 0; i < numPlayers; i++)
 				if(i == (numPlayers-1))
-					writer.println((i+1) + "-" + players.get(i).getRentEarned());
+					writer.println((i+1) + "-" + adjustNumber(players.get(i).getRentEarned()));
 				else
-					writer.print((i+1) + "-" + players.get(i).getRentEarned() + ";");
+					writer.print((i+1) + "-" + adjustNumber(players.get(i).getRentEarned()) + ";");
 			
 			// Qual foi o valor pago de aluguel por cada jogador?
 			writer.print("5:");
 			for(int i = 0; i < numPlayers; i++)
 				if(i == (numPlayers-1))
-					writer.println((i+1) + "-" + players.get(i).getRentPaid());
+					writer.println((i+1) + "-" + adjustNumber(players.get(i).getRentPaid()));
 				else
-					writer.print((i+1) + "-" + players.get(i).getRentPaid() + ";");
+					writer.print((i+1) + "-" + adjustNumber(players.get(i).getRentPaid()) + ";");
 			
 			// Qual foi o valor gasto na compra de imóveis por cada jogador?
 			writer.print("6:");
 			for(int i = 0; i < numPlayers; i++)
 				if(i == (numPlayers-1))
-					writer.println((i+1) + "-" + players.get(i).getPurchasedPropertyMoney());
+					writer.println((i+1) + "-" + adjustNumber(players.get(i).getPurchasedPropertyMoney()));
 				else
-					writer.print((i+1) + "-" + players.get(i).getPurchasedPropertyMoney() + ";");
+					writer.print((i+1) + "-" + adjustNumber(players.get(i).getPurchasedPropertyMoney()) + ";");
 			
 			// Quantos “passa a vez” cada jogador teve?
 			writer.print("7:");
