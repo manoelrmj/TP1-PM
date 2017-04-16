@@ -118,6 +118,7 @@ public class Main {
 				board.addPosition(auxPosition);
 			}
 		}
+		board.sortPositions();
 		return board;
 	}
 
@@ -154,8 +155,8 @@ public class Main {
 
 	public static void main(String[] args) {
 		// Leitura dos aquivos
-		String boardFilePath = "testes-alunos/entrada/tabuleiro.txt";
-		String movesFilePath = "testes-alunos/entrada/jogadas.txt";
+		String boardFilePath = "testes/tabuleiro_5.txt";
+		String movesFilePath = "testes/jogadas_5.txt";
 		ArrayList<String> boardDescription = readBoardFile(boardFilePath);
 		ArrayList<String> movesDescription = readMovesFile(movesFilePath);
 				

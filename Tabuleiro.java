@@ -1,4 +1,6 @@
 import java.util.ArrayList;
+import java.util.Collections;
+import java.util.Comparator;
 
 public final class Tabuleiro {
 	
@@ -27,5 +29,19 @@ public final class Tabuleiro {
 	
 	public Posicao getPosition(int positionId){
 		return this.positions.get(positionId-1);
+	}
+	
+	/**
+	 * Este metodo ordena as posicoes do tabuleiro a partir do atributo position em
+	 * ordem crescente. 
+	 */
+	public void sortPositions(){
+		Collections.sort(this.positions, new Comparator<Posicao>() {
+	        @Override 
+	        public int compare(Posicao p1, Posicao p2) {
+	            return p1.getPosition() - p2.getPosition(); // Crescente
+	        }
+
+	    });
 	}
 }
