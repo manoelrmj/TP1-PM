@@ -9,6 +9,7 @@ public class Jogador {
 	private double purchasedPropertyMoney = 0;
 	private int passTurnNum = 0;
 	private int previousLap = 0;
+	private int numRound = 0;
 
 	public Jogador(int id, double value){
 		this.id = id;
@@ -110,6 +111,18 @@ public class Jogador {
 
 	public int getPreviousLap(){
 		return this.previousLap;
+	}
+
+	public int getNumRound() {
+		return numRound;
+	}
+
+	public void setNumRound(int numRound) {
+		this.numRound = numRound;
+	}
+	
+	public void increaseNumRound() {
+		this.numRound++;
 	}
 }
 

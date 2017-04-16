@@ -6,8 +6,7 @@ public final class Jogada {
 	private int playerId;
 	private int diceValue;
 	private boolean dump = false;
-	private static int numPlayers;
-	private static int flag = 0; // flag para ver quantos jogadores tem
+	private static int playersPlaying;
 	
 	/**
 	 * Construtor da classe Jogada. Ao receber todos os parametros com o valor 0,
@@ -18,7 +17,7 @@ public final class Jogada {
 	 * @param diceValue - Valor que saiu no dado
 	 */
 	public Jogada(int id, int playerId, int diceValue) {
-		if((id == 0 && playerId == 0 && diceValue == 0) || (numPlayers == 1)){
+		if((id == 0 && playerId == 0 && diceValue == 0)){
 			this.dump = true;
 		}else{
 			this.id = id;
@@ -59,6 +58,14 @@ public final class Jogada {
 		this.dump = dump;
 	}
 
+	public static int getPlayersPlaying() {
+		return playersPlaying;
+	}
+
+	public static void setPlayersPlaying(int playersPlaying) {
+		Jogada.playersPlaying = playersPlaying;
+	}
+
 	/**
 	 * Metodo que executa as jogadas. A partir das informacoes do estado do jogo (fornecido pelos
 	 * objetos 'Tabuleiro' e pela lista de jogadores) e com os dados da jogada realizada, o estado
@@ -68,56 +75,68 @@ public final class Jogada {
 	 * @param move - Objeto do tipo 'Jogada', que possui informacoes da jogada a ser processada
 	 */
 	public static void runMove(Tabuleiro board, ArrayList<Jogador> players, Jogada move){
-		if(flag == 0){
-			flag = 1;
-			numPlayers = players.size();
+		/*if(flagFirstMovePlayed == 0){
+			flagFirstMovePlayed = 1;
+			playersStillPlaying = players.size();
 		}
+		
+		playersStillPlaying = players.size();*/
+		
+		if(playersPlaying == 1){
+			printDump(board, players);
+			System.exit(0); // Encerra o jogo
+		}			
 
 		if(move.isDump()){
 			printDump(board, players);
 		}else{
-			//System.out.println("Jogada " + move.getId());
 			int playerId = move.getPlayerId()-1;
+			Jogador player = players.get(playerId);
+			// Verifica se o jogador pode jogar (Saldo > 0)
+			if(player.getBalance() < 0)
+				return; // Encerra o procedimento e não executa a jogada
 			int diceNumber = move.getDiceValue();
-			players.get(playerId).updateDiceCounter(diceNumber);
-			int playerPosition = players.get(playerId).getPosition(board.getNumPositions());
+			player.updateDiceCounter(diceNumber);
+			int playerPosition = player.getPosition(board.getNumPositions());
 
-			if(players.get(playerId).getLaps(board.getNumPositions()) != players.get(playerId).getPreviousLap()){
+			if(player.getLaps(board.getNumPositions()) != player.getPreviousLap()){
 				// Verifica se deu uma volta, para que receba os 500 reais da posição start.
-				int aux = players.get(playerId).getLaps(board.getNumPositions()) - players.get(playerId).getPreviousLap();
+				int aux = player.getLaps(board.getNumPositions()) - player.getPreviousLap();
 				for(int j=0; j<aux; j++){
-					players.get(playerId).receiveStartMoney();
+					player.receiveStartMoney();
 				}
-				//System.out.println(" Atual: " + players.get(playerId).getLaps(board.getNumPositions()) + " anterior: " + players.get(playerId).getPreviousLap());
-				players.get(playerId).updatePreviosLap(aux);
+				//System.out.println(" Atual: " + player.getLaps(board.getNumPositions()) + " anterior: " + player.getPreviousLap());
+				player.updatePreviosLap(aux);
 			}
 
 			if(board.getPosition(playerPosition).getType() == 2){ // Se o jogador caiu em 'passe a vez'
-				players.get(playerId).updatePassTurn();
+				player.updatePassTurn();
 			}
 			if(board.getPosition(playerPosition).getType() == 3){ // Se o jogador caiu em um imóvel
 				if(board.getPosition(playerPosition).getProperty().isSold()){ // Se o imóvel já tem dono
 					if(board.getPosition(playerPosition).getProperty().getOwner() != playerId){ // Se o imóvel não for dele mesmo
-						if(players.get(playerId).getBalance() >= board.getPosition(playerPosition).getProperty().getTax()){
+						if(player.getBalance() >= board.getPosition(playerPosition).getProperty().getTax()){
 							// Se o jogador tem dinheiro para pagar o aluguel
-							players.get(playerId).payRent(board.getPosition(playerPosition).getProperty().getTax());
+							player.payRent(board.getPosition(playerPosition).getProperty().getTax());
 							players.get(board.getPosition(playerPosition).getProperty().getOwner()).receiveRent(board.getPosition(playerPosition).getProperty().getTax());
 						}
 						else{ // Se o jogar não tem dinheiro para pagar -> ele perde o jogo
-							players.get(playerId).setPlaying(false);
-							players.get(playerId).payRentAndLose(board.getPosition(playerPosition).getProperty().getTax());
-							numPlayers--;
+							player.setPlaying(false);
+							player.payRentAndLose(board.getPosition(playerPosition).getProperty().getTax());
+							playersPlaying--;
 						}
 					}
 				}
 				else{ // Se o imóvel não tem dono
-					if(players.get(playerId).getBalance() >= board.getPosition(playerPosition).getProperty().getPrice()){
+					if(player.getBalance() >= board.getPosition(playerPosition).getProperty().getPrice()){
 						// Se tiver dinheiro pra comprar:
 						board.getPosition(playerPosition).getProperty().setSold(true);
-						players.get(playerId).buyProperty(board.getPosition(playerPosition).getProperty().getPrice());
+						player.buyProperty(board.getPosition(playerPosition).getProperty().getPrice());
 						board.getPosition(playerPosition).getProperty().setOwner(playerId);
 					}
 				}
+				
+				player.increaseNumRound();
 			}
 		}
 	}
@@ -130,10 +149,13 @@ public final class Jogada {
 	private static void printDump(Tabuleiro board, ArrayList<Jogador> players){
 		int numPlayers = players.size();
 		// Quantas rodadas o jogo teve?
-		System.out.println("1:");
-		for(int i = 0; i < numPlayers; i++){
-			
-		}
+		System.out.print("1:");
+		// Busca pelo jogador com maior numero de jogadas
+		int maxRound = 0;
+		for(int i = 0; i < numPlayers; i++)
+			if(players.get(i).getNumRound() > maxRound)
+				maxRound = players.get(i).getNumRound();
+		System.out.println(maxRound);
 		
 		// Quantas voltas foram dadas no tabuleiro por cada jogador?
 		System.out.print("2:");

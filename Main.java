@@ -8,8 +8,6 @@ public class Main {
 	// Variaveis de manipulação de arquivos
 	private static BufferedReader readArq;
 	private static FileReader arq;
-	private static int playersStillPlaying;
-	
 	/**
 	 * Método responsável pela leitura do arquivo 'tabuleiro.txt'
 	 * @param boardFilePath - Caminho do arquivo de entrada com informacoes do tabuleiro
@@ -170,7 +168,6 @@ public class Main {
 		matchInfo = movesDescription.get(0).split("%"); 
 		numMoves = Integer.parseInt(matchInfo[0]);
 		numPlayers = Integer.parseInt(matchInfo[1]);
-		playersStillPlaying = numPlayers;
 		initialBalance = Integer.parseInt(matchInfo[2]);
 		ArrayList<Jogada> moves = buildMoves(movesDescription);
 		
@@ -180,7 +177,8 @@ public class Main {
 			Jogador auxJogador = new Jogador(i, initialBalance);
 			players.add(auxJogador);
 		}
-						
+		
+		Jogada.setPlayersPlaying(players.size());
 		// Execucao das jogadas
 		for(int i = 0; i<moves.size(); i++)
 			Jogada.runMove(board, players, moves.get(i));
