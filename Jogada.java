@@ -1,3 +1,6 @@
+import java.io.FileNotFoundException;
+import java.io.PrintWriter;
+import java.io.UnsupportedEncodingException;
 import java.util.ArrayList;
 
 public final class Jogada {
@@ -146,62 +149,69 @@ public final class Jogada {
 	 * @param players - Lista de objetos do tipo 'Jogador'
 	 */
 	private static void printDump(Tabuleiro board, ArrayList<Jogador> players){
-		int numPlayers = players.size();
-		// Quantas rodadas o jogo teve?
-		System.out.print("1:");
-		// Busca pelo jogador com maior numero de jogadas
-		int maxRound = 0;
-		for(int i = 0; i < numPlayers; i++)
-			if(players.get(i).getNumRound() > maxRound)
-				maxRound = players.get(i).getNumRound();
-		System.out.println(maxRound);
-		
-		// Quantas voltas foram dadas no tabuleiro por cada jogador?
-		System.out.print("2:");
-		for(int i = 0; i < numPlayers; i++)
-			if(i == (numPlayers-1))
-				System.out.println((i+1) + "-" + players.get(i).getLaps(board.getNumPositions()));
-			else
-				System.out.print((i+1) + "-" + players.get(i).getLaps(board.getNumPositions()) + ";");		
-		
-		// Quanto de dinheiro cada jogador ficou (colocacao)?
-		System.out.print("3:");
-		for(int i = 0; i < numPlayers; i++)
-			if(i == (numPlayers-1))
-				System.out.println((i+1) + "-" + players.get(i).getBalance());
-			else
-				System.out.print((i+1) + "-" + players.get(i).getBalance() + ";");
-		
-		// Qual foi a quantidade de aluguel recebida por cada jogador?
-		System.out.print("4:");
-		for(int i = 0; i < numPlayers; i++)
-			if(i == (numPlayers-1))
-				System.out.println((i+1) + "-" + players.get(i).getRentEarned());
-			else
-				System.out.print((i+1) + "-" + players.get(i).getRentEarned() + ";");
-		
-		// Qual foi o valor pago de aluguel por cada jogador?
-		System.out.print("5:");
-		for(int i = 0; i < numPlayers; i++)
-			if(i == (numPlayers-1))
-				System.out.println((i+1) + "-" + players.get(i).getRentPaid());
-			else
-				System.out.print((i+1) + "-" + players.get(i).getRentPaid() + ";");
-		
-		// Qual foi o valor gasto na compra de imóveis por cada jogador?
-		System.out.print("6:");
-		for(int i = 0; i < numPlayers; i++)
-			if(i == (numPlayers-1))
-				System.out.println((i+1) + "-" + players.get(i).getPurchasedPropertyMoney());
-			else
-				System.out.print((i+1) + "-" + players.get(i).getPurchasedPropertyMoney() + ";");
-		
-		// Quantos “passa a vez” cada jogador teve?
-		System.out.print("7:");
-		for(int i = 0; i < numPlayers; i++)
-			if(i == (numPlayers-1))
-				System.out.println((i+1) + "-" + players.get(i).getPassTurn());
-			else
-				System.out.print((i+1) + "-" + players.get(i).getPassTurn() + ";");
+		// Manipulação de arquivo
+		try {
+			PrintWriter writer = new PrintWriter("estatistica.txt", "UTF-8");
+			int numPlayers = players.size();
+			// Quantas rodadas o jogo teve?
+			writer.print("1:");
+			// Busca pelo jogador com maior numero de jogadas
+			int maxRound = 0;
+			for(int i = 0; i < numPlayers; i++)
+				if(players.get(i).getNumRound() > maxRound)
+					maxRound = players.get(i).getNumRound();
+			writer.println(maxRound);
+			
+			// Quantas voltas foram dadas no tabuleiro por cada jogador?
+			writer.print("2:");
+			for(int i = 0; i < numPlayers; i++)
+				if(i == (numPlayers-1))
+					writer.println((i+1) + "-" + players.get(i).getLaps(board.getNumPositions()));
+				else
+					writer.print((i+1) + "-" + players.get(i).getLaps(board.getNumPositions()) + ";");		
+			
+			// Quanto de dinheiro cada jogador ficou (colocacao)?
+			writer.print("3:");
+			for(int i = 0; i < numPlayers; i++)
+				if(i == (numPlayers-1))
+					writer.println((i+1) + "-" + players.get(i).getBalance());
+				else
+					writer.print((i+1) + "-" + players.get(i).getBalance() + ";");
+			
+			// Qual foi a quantidade de aluguel recebida por cada jogador?
+			writer.print("4:");
+			for(int i = 0; i < numPlayers; i++)
+				if(i == (numPlayers-1))
+					writer.println((i+1) + "-" + players.get(i).getRentEarned());
+				else
+					writer.print((i+1) + "-" + players.get(i).getRentEarned() + ";");
+			
+			// Qual foi o valor pago de aluguel por cada jogador?
+			writer.print("5:");
+			for(int i = 0; i < numPlayers; i++)
+				if(i == (numPlayers-1))
+					writer.println((i+1) + "-" + players.get(i).getRentPaid());
+				else
+					writer.print((i+1) + "-" + players.get(i).getRentPaid() + ";");
+			
+			// Qual foi o valor gasto na compra de imóveis por cada jogador?
+			writer.print("6:");
+			for(int i = 0; i < numPlayers; i++)
+				if(i == (numPlayers-1))
+					writer.println((i+1) + "-" + players.get(i).getPurchasedPropertyMoney());
+				else
+					writer.print((i+1) + "-" + players.get(i).getPurchasedPropertyMoney() + ";");
+			
+			// Quantos “passa a vez” cada jogador teve?
+			writer.print("7:");
+			for(int i = 0; i < numPlayers; i++)
+				if(i == (numPlayers-1))
+					writer.println((i+1) + "-" + players.get(i).getPassTurn());
+				else
+					writer.print((i+1) + "-" + players.get(i).getPassTurn() + ";");
+			writer.close();
+		} catch (FileNotFoundException | UnsupportedEncodingException e) {
+			System.out.println("Erro ao criar o arquivo estatistica.txt");
+		}
 	}
 }

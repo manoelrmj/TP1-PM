@@ -154,8 +154,8 @@ public class Main {
 
 	public static void main(String[] args) {
 		// Leitura dos aquivos
-		String boardFilePath = "testes/tabuleiro_2.txt";
-		String movesFilePath = "testes/jogadas_2.txt";
+		String boardFilePath = "testes-alunos/entrada/tabuleiro.txt";
+		String movesFilePath = "testes-alunos/entrada/jogadas.txt";
 		ArrayList<String> boardDescription = readBoardFile(boardFilePath);
 		ArrayList<String> movesDescription = readMovesFile(movesFilePath);
 				
